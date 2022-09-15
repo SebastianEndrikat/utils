@@ -1,0 +1,25 @@
+#!/bin/bash
+# Backup data files to local backup dir
+
+# Settings
+source_dir=''
+source_files='foo*.dat'  # within source_dir
+target_dir=''
+identifier='myfiles'
+
+# Derive variables
+source_dir="$(readlink -f "$source_dir")"
+target_dir="$(readlink -f "$target_dir")"
+now=$(date -u +"%Y%m%d_%H%M%S")
+outfile="$target_dir"/"$identifier"_"$USER"_"$now".tgz
+
+# Run
+echo "Creating backup of data in "$outfile
+cd "$source_dir"
+tar -czf "$outfile" $source_files
+echo "Done."
+
+cd "$target_dir"
+echo "Current backup files:"
+ls -lh "$identifier"_*.tgz
+echo "Consider manually deleting old backup files."
